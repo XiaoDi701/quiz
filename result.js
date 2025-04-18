@@ -53,54 +53,6 @@ const answerMap = [
   ["leadership", "ambition", "innocence", "pride", "indifference"],
   ["leadership", "ambition", "innocence", "pride", "indifference"]
 ];
-
-let currentQuestion = 0;
-const quizContainer = document.getElementById("quiz");
-
-function showQuestion() {
-  if (currentQuestion >= questions.length) {
-    showResult();
-    return;
-  }
-
-  document.body.style.backgroundImage = `url("img/back.jpg")`;
-  document.body.style.backgroundAttachment = "fixed";
-  document.body.style.backgroundSize = "cover";
-  document.body.style.backgroundRepeat = "no-repeat";
-  document.body.style.backgroundPosition = "center";
-
-  const q = questions[currentQuestion];
-  const opts = options[currentQuestion];
-
-  quizContainer.innerHTML = `<div class="question"><h3>${q}</h3></div>`;
-  opts.forEach((opt, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = opt;
-    btn.onclick = () => {
-      const trait = answerMap[currentQuestion][i];
-      scores[trait]++;
-      currentQuestion++;
-      showQuestion();
-    };
-    quizContainer.appendChild(btn);
-  });
-}
-showQuestion(); 
-
-
-const aboutToggle = document.getElementById("about-toggle");
-const aboutText = document.getElementById("about-text");
-
-if (aboutToggle && aboutText) {
-  aboutToggle.addEventListener("click", () => {
-    const isShown = aboutText.style.display === "block";
-    aboutText.style.display = isShown ? "none" : "block";
-    aboutToggle.textContent = isShown ? "About this quiz" : "Hide";
-  });
-}
-
-
-
 const themeColors = {
   "Yevgeniya": {
     text: "#b71c1c",
@@ -128,6 +80,69 @@ const themeColors = {
   }
 };
 
+
+let currentQuestion = 0;
+const quizContainer = document.getElementById("quiz");
+
+const savedScores = JSON.parse(localStorage.getItem("quizScores"));
+const savedCurrent = parseInt(localStorage.getItem("quizCurrent"));
+
+if (savedScores && !isNaN(savedCurrent)) {
+  Object.assign(scores, savedScores);
+  currentQuestion = savedCurrent;
+}
+
+
+function showQuestion() {
+  if (currentQuestion >= questions.length) {
+    showResult();
+    return;
+  }
+
+  document.body.style.backgroundImage = `url("img/back.jpg")`;
+  document.body.style.backgroundAttachment = "fixed";
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundPosition = "center";
+
+  const q = questions[currentQuestion];
+  const opts = options[currentQuestion];
+
+  quizContainer.innerHTML = `<div class="question"><h3>${q}</h3></div>`;
+  opts.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => {
+      const trait = answerMap[currentQuestion][i];
+      scores[trait]++;
+      currentQuestion++;
+    
+    
+      localStorage.setItem("quizScores", JSON.stringify(scores));
+      localStorage.setItem("quizCurrent", currentQuestion);
+    
+      showQuestion();
+    };
+    quizContainer.appendChild(btn);
+  });
+}
+showQuestion(); 
+
+
+const aboutToggle = document.getElementById("about-toggle");
+const aboutText = document.getElementById("about-text");
+
+if (aboutToggle && aboutText) {
+  aboutToggle.addEventListener("click", () => {
+    const isShown = aboutText.style.display === "block";
+    aboutText.style.display = isShown ? "none" : "block";
+    aboutToggle.textContent = isShown ? "About this quiz" : "Hide";
+  });
+}
+
+
+
+
 function showResult() {
   const maxScore = Math.max(...Object.values(scores));
   const topTraits = traits.filter(trait => scores[trait] === maxScore);
@@ -140,20 +155,21 @@ function showResult() {
     finalResult = resultNames[picked];
   }
 
-
+  // 设置背景图
   document.body.style.backgroundImage = `url("img/${finalResult}.jpg")`;
   document.body.style.backgroundAttachment = "fixed";
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "center";
 
+  // 清空页面并设置容器样式
   quizContainer.innerHTML = "";
-
   quizContainer.style.display = "flex";
   quizContainer.style.alignItems = "center";
   quizContainer.style.justifyContent = "center";
   quizContainer.style.minHeight = "100vh";
- 
+
+  // 颜色主题
   const theme = themeColors[finalResult];
   const resultDescriptions = {
     "Yevgeniya": `The character most like you is Yevgenia, a once-in-a-century genius and ambitious figure of the Piauoto Empire. She is both innocent and cruel—an idealist who would stop at nothing to build a perfect world. She dreamed of a utopia, a world driven by passion and ideals. But her extreme beliefs led to pain, death, and war for the people. In the end, she was hanged at the gallows. To later generations, she became known as a notorious extremist—not because she was evil, but because she was far too idealistic.`,
@@ -167,34 +183,37 @@ function showResult() {
  
   const resultContainer = document.createElement("div");
   resultContainer.className = "result-container";
- 
+
   const img = document.createElement("img");
   img.src = `img/${finalResult}.png`;
   img.alt = finalResult;
   img.className = "result-image";
- 
+
   const resultText = document.createElement("div");
   resultText.className = "result-text";
   resultText.innerHTML = `<h2>Your match is: ${finalResult}</h2>`;
- 
-const description = document.createElement("p");
-description.className = "result-description";
-description.textContent = resultDescriptions[finalResult] || "";
-resultText.appendChild(description);
 
- 
-const retryBtn = document.createElement("button");
-retryBtn.textContent = "Take the quiz again";
-retryBtn.className = "retry-button";
-retryBtn.onclick = () => location.reload();
-resultText.appendChild(retryBtn);
+  const description = document.createElement("p");
+  description.className = "result-description";
+  description.textContent = resultDescriptions[finalResult] || "";
+  resultText.appendChild(description);
 
- 
+  // ✅ 正确加入 retry 按钮（此处之前漏写了定义）
+  const retryBtn = document.createElement("button");
+  retryBtn.textContent = "Take the quiz again";
+  retryBtn.className = "retry-button";
+  retryBtn.onclick = () => {
+    localStorage.removeItem("quizScores");
+    localStorage.removeItem("quizCurrent");
+    location.reload();
+  };
+  resultText.appendChild(retryBtn);
+
+  // 应用主题色
   if (theme) {
     resultText.style.color = theme.text;
     resultText.style.backgroundColor = theme.background;
     resultText.style.border = `2px solid ${theme.text}`;
-
   }
 
   resultContainer.appendChild(img);
