@@ -35,7 +35,7 @@
     color: white;
     margin-bottom: 2.5rem;
     letter-spacing: 1px;
-    text-shadow: 0 0 8px rgba(0, 0, 0, 0.4); /* 增加黑色阴影，让白色更清楚 */
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.4); 
   }
   
   
@@ -56,7 +56,7 @@
   .question h3 {
     font-size: 1.25rem;
     margin-bottom: 1rem;
-    color: #424242; /* 深灰色 */
+    color: #424242; 
   }
   
   button {

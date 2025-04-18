@@ -85,7 +85,7 @@ document.body.style.backgroundPosition = "center";
   });
 }
 
-// 主题色配置
+
 const themeColors = {
   "Yevgeniya": {
     text: "#b71c1c",
@@ -125,23 +125,20 @@ function showResult() {
     finalResult = resultNames[picked];
   }
 
-  // 设置背景图（.jpg）
+
   document.body.style.backgroundImage = `url("img/${finalResult}.jpg")`;
   document.body.style.backgroundAttachment = "fixed";
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "center";
 
-  // 清空测试区域
   quizContainer.innerHTML = "";
 
-  // 设置 quizContainer 为 flex 容器并垂直居中整个结果块
   quizContainer.style.display = "flex";
   quizContainer.style.alignItems = "center";
   quizContainer.style.justifyContent = "center";
   quizContainer.style.minHeight = "100vh";
-
-  // 获取主题色
+ 
   const theme = themeColors[finalResult];
   const resultDescriptions = {
     "Yevgeniya": `The character most like you is Yevgenia, a once-in-a-century genius and ambitious figure of the Piauoto Empire. She is both innocent and cruel—an idealist who would stop at nothing to build a perfect world. She dreamed of a utopia, a world driven by passion and ideals. But her extreme beliefs led to pain, death, and war for the people. In the end, she was hanged at the gallows. To later generations, she became known as a notorious extremist—not because she was evil, but because she was far too idealistic.`,
@@ -152,35 +149,32 @@ function showResult() {
     "Aristina": `The character most like you is Aristina, the mother of the famous revolutionary, Abigail. Though born into privilege and raised as a noble in the colonies, the rebellion of her older sister—and her sister’s death—made her realize that her comfortable life was built on the suffering of countless others. She secretly fell in love with a spy from the colonies, and after giving birth to their daughter, he was soon discovered and executed. To protect the child, Aristina claimed Abigail was her adopted daughter. She was a woman of knowledge and conscience. Though the revolution took from her the three people she loved most—her sister, her husband, and eventually her daughter—she never gave up. Aristina lived on with strength and continued to contribute to the final stages of the revolution.`
   };
   
-
-  // 创建结果容器
+ 
   const resultContainer = document.createElement("div");
   resultContainer.className = "result-container";
-
-  // 左侧图片
+ 
   const img = document.createElement("img");
   img.src = `img/${finalResult}.png`;
   img.alt = finalResult;
   img.className = "result-image";
-
-  // 右侧文字
+ 
   const resultText = document.createElement("div");
   resultText.className = "result-text";
   resultText.innerHTML = `<h2>Your match is: ${finalResult}</h2>`;
-  // 添加描述段落
+ 
 const description = document.createElement("p");
 description.className = "result-description";
 description.textContent = resultDescriptions[finalResult] || "";
 resultText.appendChild(description);
 
-// 添加重新测试按钮
+ 
 const retryBtn = document.createElement("button");
 retryBtn.textContent = "Take the quiz again";
 retryBtn.className = "retry-button";
 retryBtn.onclick = () => location.reload();
 resultText.appendChild(retryBtn);
 
-  // 应用颜色主题
+ 
   if (theme) {
     resultText.style.color = theme.text;
     resultText.style.backgroundColor = theme.background;
