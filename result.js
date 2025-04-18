@@ -62,11 +62,12 @@ function showQuestion() {
     showResult();
     return;
   }
-document.body.style.backgroundImage = `url("img/back.jpg")`;
-document.body.style.backgroundAttachment = "fixed";
-document.body.style.backgroundSize = "cover";
-document.body.style.backgroundRepeat = "no-repeat";
-document.body.style.backgroundPosition = "center";
+
+  document.body.style.backgroundImage = `url("img/back.jpg")`;
+  document.body.style.backgroundAttachment = "fixed";
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundPosition = "center";
 
   const q = questions[currentQuestion];
   const opts = options[currentQuestion];
@@ -84,6 +85,20 @@ document.body.style.backgroundPosition = "center";
     quizContainer.appendChild(btn);
   });
 }
+showQuestion(); 
+
+
+const aboutToggle = document.getElementById("about-toggle");
+const aboutText = document.getElementById("about-text");
+
+if (aboutToggle && aboutText) {
+  aboutToggle.addEventListener("click", () => {
+    const isShown = aboutText.style.display === "block";
+    aboutText.style.display = isShown ? "none" : "block";
+    aboutToggle.textContent = isShown ? "About this quiz" : "Hide";
+  });
+}
+
 
 
 const themeColors = {

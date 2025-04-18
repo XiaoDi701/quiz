@@ -157,5 +157,29 @@
     background-color: #cccccc;
   }
   
- 
+  .about-button {
+    background-color: #eeeeee;
+    border: 1px solid #aaaaaa;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Crimson Pro', serif;
+    transition: background-color 0.2s ease;
+  }
+  
+  .about-button:hover {
+    background-color: #cccccc;
+  }
+  
+  .about-text {
+    background-color: white;     
+    padding: 1.5rem;              
+    border-radius: 12px;            
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+    margin: 1rem auto;
+    max-width: 700px;
+    text-align: left;
+  }
+  
   
